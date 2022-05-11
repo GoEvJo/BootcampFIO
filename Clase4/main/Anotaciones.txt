@@ -1,0 +1,18 @@
+Structs
+Las estructuras son de los tipos de datos más importantes.
+Son lo más cercano a un 'objeto'.
+Estructura = colección de campos.
+
+Arrays
+Conjunto ordenado de datos del mismo tipo.
+La particularidad es que el tamaño del array es parte de su tipo [NO SE PUEDE CAMBIAR SU TAMAñO].
+
+Slices
+Son más usados que arrays.
+No son de tamaño fijo.
+
+Mapas
+Son estructuras de datos que vinculan pares llave-valor.
+Pueden usar booleanos, numéricos, strings, punteros, channels e interfaces,
+y estructuras o matrices que contienen solo esos tipos.
+NO PUEDEN USAR Slices, mapas ni funciones; ya que estos tipos no se pueden comparar usando ==.
