@@ -12,3 +12,26 @@ D. Crear un a función que permita obtener de forma recursiva el
 factorial de un número.
 */
 
+package main
+
+import "fmt"
+
+func product(a, b int) int {
+	result := a * b
+	return result
+}
+func minorOf(numbers ...int) int {
+	minor int
+	for _, num:=range numbers{
+		if numbers < minor {
+			minor=numbers
+		}
+	}
+	return numbers
+}
+
+func main() {
+	number := product(5 * 5)
+	fmt.Println("El producto es: ", number)
+	fmt.Println(minorOf(5,89,24,64,22,1))
+}
