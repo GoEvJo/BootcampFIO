@@ -21,17 +21,54 @@ func product(a, b int) int {
 	return result
 }
 func minorOf(numbers ...int) int {
-	minor int
-	for _, num:=range numbers{
-		if numbers < minor {
-			minor=numbers
+	minor := 0
+	for i, num := range numbers {
+		if i == 0 {
+			minor = num
+		}
+		if num < minor {
+			minor = num
 		}
 	}
-	return numbers
+	return minor
+}
+
+type animal struct {
+	kind            string
+	paw, eyes, wing int
+}
+type pet struct {
+	Name string
+	animal
+	Race, Color string
+}
+
+func /*(r pet)*/ load() *pet {
+	NewPet := pet{
+		Name: "Lolo",
+		animal: animal{kind: "Dog",
+			paw:  4,
+			eyes: 2,
+			wing: 0,
+		},
+		Race:  "Street",
+		Color: "Black",
+	}
+	PointingNewPet := &NewPet
+	return PointingNewPet
+}
+
+func factorial(a int) int64 {
+	if a == 0 {
+		return 1
+	}
+	return int64(a) * factorial(a-1)
 }
 
 func main() {
-	number := product(5 * 5)
+	number := product(5, 5)
 	fmt.Println("El producto es: ", number)
-	fmt.Println(minorOf(5,89,24,64,22,1))
+	fmt.Println("El menor encontrado es: ", minorOf(5, 89, 24, 64, 22, 15))
+
+	fmt.Println("La nueva mascota es: ", load())
 }
