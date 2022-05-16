@@ -31,10 +31,12 @@ type alumno struct {
 	notas  [3]int
 	faltas int
 }
-func (alumno alumno) prom([3]int) float64 {
-	promedio := (float64(alumno.notas[0])+float64(alumno.notas[1])+float64(alumno.notas[2]))/3
+
+func (alumno alumno) prom(al alumno) float64 {
+	promedio := (float64(al.notas[0]) + float64(al.notas[1]) + float64(al.notas[2])) / 3
 	return promedio
 }
+
 type profesor struct {
 	Identity
 	antigüedad int
@@ -47,9 +49,13 @@ type Curso struct {
 }
 
 func (metodo *Curso) Reprobados(laLista []alumno) {
-for i, dato := range laLista {
-	if metodo.prom(laLista[i])
-}
+	// Recibo la lista de alumnos, tengo que acceder a las notas de cada alumno, sacar el promedio y despues comparar con 6
+	for i, _ := range laLista {
+		fmt.Println("rangos de slice")
+		if laLista[i].prom(laLista[i]) < 6 {
+			println("Reprobado")
+		}
+	}
 }
 func (metodo *Curso) Libres(laLista []alumno) {
 
@@ -66,81 +72,81 @@ func main() {
 
 	listaDeAlumnos := []alumno{}
 
-	profesor1 := profesor {
-		Identity {
-			ID : 1505,
+	profesor1 := profesor{
+		Identity: Identity{
+			ID:     1505,
 			nombre: "Santiago",
 		},
 		antigüedad: 15,
 	}
 
 	alumno1 := alumno{
-		Identity {
-			ID: 1910,
+		Identity: Identity{
+			ID:     1910,
 			nombre: "José",
 		},
-		notas: {5,9,6},
+		notas:  {5, 9, 6},
 		faltas: 2,
 	}
 	listaDeAlumnos = append(listaDeAlumnos, alumno1)
 
 	alumno2 := alumno{
-		Identity {
-			ID: 1912,
+		Identity: Identity{
+			ID:     1912,
 			nombre: "Cintia",
 		},
-		notas: {6,10,7},
+		notas:  {6, 10, 7},
 		faltas: 3,
 	}
 	listaDeAlumnos = append(listaDeAlumnos, alumno2)
 
 	alumno3 := alumno{
-		Identity {
-			ID: 1913,
+		Identity: Identity{
+			ID:     1913,
 			nombre: "Simón",
 		},
-		notas: {6,6,6},
+		notas:  {6, 6, 6},
 		faltas: 0,
 	}
 	listaDeAlumnos = append(listaDeAlumnos, alumno3)
 
 	alumno4 := alumno{
-		Identity {
-			ID: 1914,
+		Identity: Identity{
+			ID:     1914,
 			nombre: "José",
 		},
-		notas: {4,5,2},
+		notas:  {4, 5, 2},
 		faltas: 5,
 	}
 	listaDeAlumnos = append(listaDeAlumnos, alumno4)
 
 	alumno5 := alumno{
-		Identity {
-			ID: 1915,
+		Identity: Identity{
+			ID:     1915,
 			nombre: "Ana",
 		},
-		notas: {10,9,8},
+		notas:  {10, 9, 8},
 		faltas: 1,
 	}
 	listaDeAlumnos = append(listaDeAlumnos, alumno5)
 
 	alumno6 := alumno{
-		Identity {
-			ID: 1910,
+		Identity: Identity{
+			ID:     1910,
 			nombre: "Rolando",
 		},
-		notas: {10,8,7},
+		notas:  {10, 8, 7},
 		faltas: 0,
 	}
 	listaDeAlumnos = append(listaDeAlumnos, alumno6)
-	
-	Curso1 := Curso {
-		Identity {
-		ID : 1808,
-		nombre : "Física cuántica avanzada",
-	},
-	aulaAsignada : 1,
-	capMax : 10,
-	lista : listaDeAlumnos,
-	encargado : profesor1,
+
+	Curso1 := Curso{
+		Identity: Identity{
+			ID:     1808,
+			nombre: "Física cuántica avanzada",
+		},
+		aulaAsignada: 1,
+		capMax:       10,
+		lista:        listaDeAlumnos,
+		encargado:    profesor1}
 }
