@@ -46,16 +46,18 @@ type Curso struct {
 	encargado            profesor
 }
 
-func (metodo *Curso) Reprobados([]alumno) {
+func (metodo *Curso) Reprobados(laLista []alumno) {
+for i, dato := range laLista {
+	if metodo.prom(laLista[i])
+}
+}
+func (metodo *Curso) Libres(laLista []alumno) {
 
 }
-func (metodo *Curso) Libres([]alumno) {
+func (metodo *Curso) Mejorcitos(laLista []alumno) {
 
 }
-func (metodo *Curso) Mejorcitos([]alumno) {
-
-}
-func (metodo *Curso) Ocupacion([]alumno) {
+func (metodo *Curso) Ocupacion(laLista []alumno) {
 
 }
 
