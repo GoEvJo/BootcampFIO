@@ -85,7 +85,7 @@ func main() {
 			ID:     1910,
 			nombre: "José",
 		},
-		notas:  {5, 9, 6},
+		notas:  [3]int{5, 9, 6},
 		faltas: 2,
 	}
 	listaDeAlumnos = append(listaDeAlumnos, alumno1)
@@ -95,7 +95,7 @@ func main() {
 			ID:     1912,
 			nombre: "Cintia",
 		},
-		notas:  {6, 10, 7},
+		notas:  [3]int{6, 10, 7},
 		faltas: 3,
 	}
 	listaDeAlumnos = append(listaDeAlumnos, alumno2)
@@ -105,7 +105,7 @@ func main() {
 			ID:     1913,
 			nombre: "Simón",
 		},
-		notas:  {6, 6, 6},
+		notas:  [3]int{6, 6, 6},
 		faltas: 0,
 	}
 	listaDeAlumnos = append(listaDeAlumnos, alumno3)
@@ -115,7 +115,7 @@ func main() {
 			ID:     1914,
 			nombre: "José",
 		},
-		notas:  {4, 5, 2},
+		notas:  [3]int{4, 5, 2},
 		faltas: 5,
 	}
 	listaDeAlumnos = append(listaDeAlumnos, alumno4)
@@ -125,7 +125,7 @@ func main() {
 			ID:     1915,
 			nombre: "Ana",
 		},
-		notas:  {10, 9, 8},
+		notas:  [3]int{10, 9, 8},
 		faltas: 1,
 	}
 	listaDeAlumnos = append(listaDeAlumnos, alumno5)
@@ -135,7 +135,7 @@ func main() {
 			ID:     1910,
 			nombre: "Rolando",
 		},
-		notas:  {10, 8, 7},
+		notas:  [3]int{10, 8, 7},
 		faltas: 0,
 	}
 	listaDeAlumnos = append(listaDeAlumnos, alumno6)
