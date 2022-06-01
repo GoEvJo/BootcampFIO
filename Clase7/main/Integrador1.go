@@ -12,13 +12,18 @@ Los datos requeridos para registrar a un cliente son:
 package main
 
 import (
+	"bufio"
+	"errors"
 	"fmt"
-	"math/rand"
 	"os"
-	"time"
+	"strconv"
+	"strings"
 )
 
 const maxID = 100
+const fileName = "customers.txt"
+
+var noFile = errors.New("el archivo indicado no fue encontrado o está dañado")
 
 var flagError bool = false
 
@@ -31,7 +36,7 @@ type client struct {
 }
 
 func (c *client) showClient() {
-	fmt.Println("\nA continuaación, los datos del cliente...")
+	fmt.Println("\nA continuación, los datos del cliente...")
 	fmt.Println("Nº de cuenta: ", c.ID)
 	fmt.Println("Nombre: ", c.nameLastname)
 	fmt.Println("DNI: ", c.DNI)
@@ -39,42 +44,84 @@ func (c *client) showClient() {
 	fmt.Println("Dirección: ", c.address, "\n")
 }
 
-func idGenerator() (int, error) {
-	number := rand.Intn(maxID)
-	if number <= 0 || number > maxID {
-		return 0, fmt.Errorf("el ID se encuentra fuera del intervalo permitido")
+func doesTheFileExist(fileName string) error {
+	if _, err := os.Stat(fileName); os.IsNotExist(err) {
+		return noFile
 	}
-	return number, nil
+	return nil
 }
 
-func openFile(file2Open string) *os.File {
-	myFile, err := os.Open(file2Open)
+func idGenerator(idGenerated *int, fileName string) (int, error) {
+	if err := doesTheFileExist(fileName); err != nil {
+		return 0, err
+	}
+	for *idGenerated <= maxID {
+		checkField, checkError := checkExisting(1, *idGenerated, fileName)
+		if checkError != nil {
+			return 0, checkError
+		}
+		if checkField != false {
+			break
+		}
+		*idGenerated++
+	}
+	if *idGenerated > maxID {
+		return 0, fmt.Errorf("el ID generado supera el valor permitido permitido")
+	}
+	return *idGenerated, nil
+}
+
+func checkExisting(field, data int, file2Open string) (checkField bool, checkError error) {
+	if errors.Is(noFile, doesTheFileExist(file2Open)) {
+		return false, noFile
+	}
+
+	newDataString := strconv.Itoa(data)
+	newDataString2 := "\r\n" + newDataString
+	toRead, err := os.ReadFile(file2Open)
 	if err != nil {
-		flagError = true
-		panic("el archivo indicado no fue encontrado o está dañado")
-	} else {
-		fmt.Println("Archivo abierto exitosamente.")
+		return false, err
 	}
-	return myFile
-}
-
-func closeFile(file2Close *os.File) {
-	if file2Close.Close() != nil {
-		fmt.Println("error al cerrar el archivo")
-	} else {
-		fmt.Println("Archivo cerrado de manera correcta.")
+	input := string(toRead)
+	control := 0
+	scanner := bufio.NewScanner(strings.NewReader(input))
+	onSemicolon := func(data []byte, atEOF bool) (advance int, token []byte, err error) {
+		for i := 0; i < len(data); i++ {
+			if data[i] == ';' {
+				control++
+				if control == 6 {
+					control = 1
+				}
+				return i + 1, data[:i], nil
+			}
+		}
+		if !atEOF {
+			return 0, nil, nil
+		}
+		// There is one final token to be delivered, which may be the empty string.
+		// Returning bufio.ErrFinalToken here tells Scan there are no more tokens after this
+		// but does not trigger an error to be returned from Scan itself.
+		return 0, data, bufio.ErrFinalToken
 	}
-}
-
-func readFile(field, data int, file2Open string) (checkField bool) {
-	file := openFile(file2Open)
-	defer closeFile(file)
-	/*
-		Código para verificar existencia de datos
-		...
-		...
-	*/
-	return true
+	scanner.Split(onSemicolon)
+	// Scan.
+	for scanner.Scan() {
+		if control == field {
+			myText := scanner.Text()
+			if myText == newDataString || myText == newDataString2 {
+				checkField = false
+				checkError = nil
+				return checkField, checkError
+			} else {
+				checkField = true
+				checkError = nil
+			}
+		}
+	}
+	if err := scanner.Err(); err != nil {
+		fmt.Fprintln(os.Stderr, "reading input:", err)
+	}
+	return checkField, checkError
 }
 
 func checkingFields(id, dni, tel int, name, address string) error {
@@ -86,7 +133,6 @@ func checkingFields(id, dni, tel int, name, address string) error {
 }
 
 func sayGoodbye() {
-	/*fmt.Println("Entrando a SayGoodBye con ", flagError)*/
 	if flagError == true {
 		fmt.Println("Se detectaron varios errores en tiempos de ejecución.")
 	} else {
@@ -96,23 +142,24 @@ func sayGoodbye() {
 
 func main() {
 	defer sayGoodbye()
-	rand.Seed(time.Now().UnixNano())
 
-	var newID int
-	var idErr error
-	for {
-		fmt.Println("Generando ID...")
-		newID, idErr = idGenerator()
-		if idErr != nil {
-			flagError = true
-			panic(idErr)
-		}
-		if readFile(1, newID, "customers.txt") == true {
-			break
-		}
+	if errors.Is(noFile, doesTheFileExist(fileName)) {
+		flagError = true
+		panic(noFile)
+	}
+
+	idCount := 1
+	newID, idErr := idGenerator(&idCount, fileName)
+	if idErr != nil {
+		flagError = true
+		panic(idErr)
 	}
 	newDNI := 2711848
-	if readFile(2, newDNI, "customers.txt") != true {
+	checkingDNI, errDNI := checkExisting(2, newDNI, fileName)
+	if errDNI != nil {
+		fmt.Println(errDNI)
+	}
+	if checkingDNI != true {
 		flagError = true
 		panic("el cliente ya existe")
 	}
@@ -133,8 +180,4 @@ func main() {
 		fmt.Println("Nuevo cliente creado con éxito.")
 		newClient.showClient()
 	}
-
-	/*flagError = true
-	//fmt.Println("A ver... ", flagError)
-	panic("panic at the disco!")*/
 }
